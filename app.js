@@ -1,9 +1,76 @@
-/*-------------------------------- Constants --------------------------------*/
+// Select the display element
+const display = document.querySelector('.display');
 
-/*-------------------------------- Variables --------------------------------*/
+// Create variables to track the input
+let currentInput = '';
+let operator = '';
+let previousInput = '';
 
-/*------------------------ Cached Element References ------------------------*/
+// Listen for all button clicks
+const buttons = document.querySelectorAll('.button');
 
-/*----------------------------- Event Listeners -----------------------------*/
+buttons.forEach(button => {
+  button.addEventListener('click', (event) => {
+    const value = event.target.innerText;
 
-/*-------------------------------- Functions --------------------------------*/
+    // Handle Clear
+    if (value === 'C') {
+      currentInput = '';
+      operator = '';
+      previousInput = '';
+      updateDisplay('');
+      return;
+    }
+
+    // Handle equals
+    if (value === '=') {
+      if (previousInput && operator && currentInput) {
+        const result = calculate(Number(previousInput), operator, Number(currentInput));
+        updateDisplay(result);
+        // Reset inputs after calculation
+        currentInput = result.toString();
+        operator = '';
+        previousInput = '';
+      }
+      return;
+    }
+
+    // Handle operators (+, -, *, /)
+    if (value === '+' || value === '-' || value === '*' || value === '/') {
+      if (currentInput) {
+        operator = value;
+        previousInput = currentInput;
+        currentInput = '';
+      }
+      return;
+    }
+
+    // Handle number button
+    if (!isNaN(value)) {
+      currentInput += value;
+      updateDisplay(currentInput);
+    }
+  });
+});
+
+// Function to update display
+function updateDisplay(content) {
+  display.innerText = content;
+}
+
+// Function to perform calculation
+function calculate(num1, operator, num2) {
+  switch (operator) {
+    case '+':
+      return num1 + num2;
+    case '-':
+      return num1 - num2;
+    case '*':
+      return num1 * num2;
+    case '/':
+      // Prevent division by zero
+      return num2 !== 0 ? num1 / num2 : 'Error';
+    default:
+      return num2;
+  }
+}
