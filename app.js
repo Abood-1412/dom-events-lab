@@ -68,8 +68,8 @@ function calculate(num1, operator, num2) {
     case '*':
       return num1 * num2;
     case '/':
-      // Prevent division by zero
-      return num2 !== 0 ? num1 / num2 : 'Error';
+      
+      return num2 !== 0 ? num1 / num2 : 'Error';  // Prevent division by zero
     default:
       return num2;
   }
